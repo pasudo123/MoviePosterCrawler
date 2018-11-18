@@ -36,3 +36,4 @@ public interface MovieKeeper {
 - https://d2.naver.com/helloworld/1469717
 - https://www.baeldung.com/java-executor-service-tutorial
 - https://jmchung.github.io/blog/2013/10/25/how-to-solve-jsoup-does-not-get-complete-html-document/
+- https://inyl.github.io/programming/2017/12/02/timeout.html
