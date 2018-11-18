@@ -30,3 +30,9 @@ public interface MovieKeeper {
 }
 ```
 스레드 풀 구현하였고, 이후 처리로직은 따로 콜백메소드에서 수행되도록 하였음.
+
+### 읽고 정리할 것들
+한번 읽어보기  
+- https://d2.naver.com/helloworld/1469717
+- https://www.baeldung.com/java-executor-service-tutorial
+- https://jmchung.github.io/blog/2013/10/25/how-to-solve-jsoup-does-not-get-complete-html-document/
