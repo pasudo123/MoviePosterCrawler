@@ -82,10 +82,10 @@ public class MovieScraper implements Runnable{
 				return;
 			}
 			
-			// ?? 모르는 에러가 발생했을때임
+			// connect time out 이 발생하는 경우가 있음
 			else {
 				System.out.println(errorMessage);
-				System.exit(1);
+				return;
 			}
 		}
 	}

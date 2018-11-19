@@ -20,9 +20,16 @@ import javax.imageio.ImageIO;
  */
 public class MovieLauncher {
 	
-	private static final int MIN_ID = 4001;	// ID 값 시작점
-	private static final int MAX_ID = 10000;	// ID 값 종료점
-	private static final int UNIT = 100;	// 체크 단위
+	// 2018 11 19 :: 90000 ~ 100000 은 하였음
+	
+	// ID 값 시작점
+	private static final int MIN_ID = 50001;
+	
+	// ID 값 종료점
+	private static final int MAX_ID = 100000;	
+	
+	// 체크 단위
+	private static final int UNIT = 100;
 	
 	public static void main(String[]args) {
 		MovieLauncher launcher = new MovieLauncher();
@@ -91,12 +98,12 @@ public class MovieLauncher {
 				}
 				catch(IllegalArgumentException e) {
 					System.out.println(e.getMessage());
-					System.out.println(posterUrl);
-					System.exit(1);
+					System.out.println("Post-URL :: " + posterUrl);
+					return;
 				}
 				catch(IOException e) {
 					System.out.println(e.getMessage());
-					System.exit(1);
+					return;
 				}
 			}
 		};
