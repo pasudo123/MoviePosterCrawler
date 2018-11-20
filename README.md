@@ -31,6 +31,9 @@ public interface MovieKeeper {
 ```
 스레드 풀 구현하였고, 이후 처리로직은 따로 콜백메소드에서 수행되도록 하였음.
 
+### 진행하려는 것
+- 영화 포스터로 Memory Game 만들기 (진행중)
+
 ### 읽고 정리할 것들
 한번 읽어보기  
 - https://d2.naver.com/helloworld/1469717
