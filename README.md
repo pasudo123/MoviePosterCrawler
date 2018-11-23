@@ -25,8 +25,9 @@ public interface MovieKeeper {
   public static final String SAVE_DIRECTORY_PATH = "E:\\doubler\\poster\\";
   public static final String IMAGE_EXT_PNG = "png";
 
-  public void keepMoviePoster(URL posterUrl, String movieTitle);
-	
+  // Method1();
+  // Method2();
+  
 }
 ```
 스레드 풀 구현하였고, 이후 처리로직은 따로 콜백메소드에서 수행되도록 하였음.
