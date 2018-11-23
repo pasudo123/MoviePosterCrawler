@@ -71,7 +71,7 @@ public class MovieScraper implements Runnable{
 					continue;
 				}
 				
-				keeper.keepMoviePoster(new URL(imageUrl), movieTitle);
+				keeper.addMoviePosterInfo(imageUrl, movieTitle);
 			}
 		} 
 		catch (IOException e) {

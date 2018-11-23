@@ -3,12 +3,17 @@ package edu.doubler.toy.movie;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * 
@@ -20,20 +25,24 @@ import javax.imageio.ImageIO;
  */
 public class MovieLauncher {
 	
-	// 2018 11 19 :: 90000 ~ 100000 은 하였음
+	// 2018 11 19 :: 90000 ~ 100000 하였음
+	// 2018 11 20 :: 70001 ~ 80000 하였음
+	// 2018 11 24 :: 80001 ~ 90000 하였음
+	// 2018 11 24 :: 60001 ~ 70000 하였음
+
+	private static final Logger logger = LogManager.getLogger(MovieLauncher.class);
 	
 	// ID 값 시작점
-	private static final int MIN_ID = 50001;
+	private static final int MIN_ID = 100001;
 	
 	// ID 값 종료점
-	private static final int MAX_ID = 100000;	
-	
-	// 체크 단위
-	private static final int UNIT = 100;
+	private static final int MAX_ID = 110000;	
 	
 	public static void main(String[]args) {
+	
 		MovieLauncher launcher = new MovieLauncher();
 		launcher.start();
+
 	}
 	
 	private void start() {
@@ -61,50 +70,75 @@ public class MovieLauncher {
 		catch (InterruptedException e) {
 			System.out.println(e.getMessage());
 		}
-		
+		finally {
+			saveMoviePoster(keeper.getMoviePosterList());
+		}
 	}
 	
 	/**
-	 * 멀티스레드 이후 콜백 처리 위함
-	 * @return
+	 * 수집한 영화 포스터 URL 을 파일로 저장.
+	 * @param moviePosterList
 	 */
-	private MovieKeeper getCallbackMovieKeeper() {
+	private void saveMoviePoster(ArrayList<String[]> moviePosterList) {
 		
-		MovieKeeper keeper = new MovieKeeper() {
+		URL posterUrl = null;
+		String movieTitle = null;
+		
+		logger.info("수집 포스터 :: " + moviePosterList.size());
+		
+		for(String values[] : moviePosterList) {
 			
-			int count = 0;
-			
-			@Override
-			public void keepMoviePoster(URL posterUrl, String movieTitle) {
+			try {
+				
+				posterUrl = new URL(values[0]);			// 영화 포스터 URL
+				movieTitle = new String(values[1]);		// 영화 제목
 				
 				File saveDirectory = new File(MovieKeeper.SAVE_DIRECTORY_PATH);
 				if(!saveDirectory.exists()) {
 					saveDirectory.mkdirs();
 				}
 				
-				count += 1;
-				if(count % UNIT == 0) {
-					System.out.println("--> " + count + "/" + ((MAX_ID - MIN_ID) + 1));
-				}
-
 				File saveFile = new File(saveDirectory + "\\" + movieTitle + ".png");
 				BufferedImage bufferedImage = null;
+				
+				bufferedImage = ImageIO.read(posterUrl);
+				ImageIO.write(bufferedImage, MovieKeeper.IMAGE_EXT_PNG, saveFile);
+				
+			}
+			catch(MalformedURLException e) {
+				System.err.println(e.getMessage());
+				return;
+			}
+			catch(IllegalArgumentException e) {
+				System.out.println(e.getMessage());
+				System.out.println("Post-URL :: " + posterUrl);
+				return;
+			}
+			catch(IOException e) {
+				System.out.println(e.getMessage());
+				return;
+			}
+		}
+	}
+	
+	/**
+	 * 콜백 처리 객체
+	 * @return
+	 */
+	private MovieKeeper getCallbackMovieKeeper() {
+		
+		MovieKeeper keeper = new MovieKeeper() {
+			
+			ArrayList<String[]> moviePosterList = new ArrayList<String[]>();
 
-				try {
-					
-					bufferedImage = ImageIO.read(posterUrl);
-					ImageIO.write(bufferedImage, MovieKeeper.IMAGE_EXT_PNG, saveFile);
-					
-				}
-				catch(IllegalArgumentException e) {
-					System.out.println(e.getMessage());
-					System.out.println("Post-URL :: " + posterUrl);
-					return;
-				}
-				catch(IOException e) {
-					System.out.println(e.getMessage());
-					return;
-				}
+			@Override
+			public void addMoviePosterInfo(String posterUrl, String movieTitle) {
+				moviePosterList.add(new String[] {posterUrl, movieTitle});
+			}
+
+			@Override
+			public ArrayList<String[]> getMoviePosterList() {
+				return moviePosterList;
 			}
 		};
 		
