@@ -7,6 +7,7 @@
 - java 1.8.0_181
 - Eclipse Version 2018-09
 - [jsoup 1.11.3](https://jsoup.org/)
+- [mysql connector java 8.0](https://dev.mysql.com/downloads/connector/j/)
 
 ### 실행
 ```java
