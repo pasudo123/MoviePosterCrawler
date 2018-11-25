@@ -42,3 +42,8 @@ public interface MovieKeeper {
 - https://www.baeldung.com/java-executor-service-tutorial
 - https://jmchung.github.io/blog/2013/10/25/how-to-solve-jsoup-does-not-get-complete-html-document/
 - https://inyl.github.io/programming/2017/12/02/timeout.html
+
+### ISSUE
+- Oracle Sequence 와 MySQL Auto_increment
+- MySQL Server TIMEZONE 설정 관련
+- MySQL Batch (addBatch -> executeBatch -> clearBatch)
