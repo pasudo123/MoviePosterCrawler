@@ -2,7 +2,6 @@ package edu.doubler.toy.movie.util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -14,21 +13,15 @@ public class DatabaseProcessorOnMoviePosterTable {
 	
 	private Connection connection = null;
 	private PreparedStatement preparedStatement = null;
-	private ResultSet resultSet = null;
 	
-	private static final String INSERT_QUERY = "INSERT INTO MOVIE_POSTER_TB VALUES (?, ?)";
+	private static final String INSERT_QUERY = "INSERT INTO MOVIE_POSTER_TB (MOVIE_TITLE, MOVIE_POSTER_PATH) VALUES (?, ?)";
 	
 	/**
 	 * Connection 객체 세팅
 	 */
-	public void setConnection() {
-		try {
-			if(connection != null || connection.isClosed()) {
-				connection = ConnectionMaker.getConnection();
-			}
-		} 
-		catch (SQLException e) {
-			e.printStackTrace();
+	private void setConnection() {
+		if(connection == null) {
+			this.connection = ConnectionMaker.getConnection();
 		}
 	}
 	
@@ -37,6 +30,8 @@ public class DatabaseProcessorOnMoviePosterTable {
 	 * @return
 	 */
 	public void insertOnMoviePosterTable(ArrayList<MoviePosterDao> moviePosterDaoList) {
+		
+		setConnection();
 		
 		// 배치 처리
 		/**
@@ -50,24 +45,31 @@ public class DatabaseProcessorOnMoviePosterTable {
 			connection.setAutoCommit(false);
 			preparedStatement = connection.prepareStatement(INSERT_QUERY);
 			
+			String title = null;
+			String path = null;
+			
 			for(int i = 0; i < moviePosterDaoList.size(); i++) {
+
+				title = moviePosterDaoList.get(i).getMovieTitle();
+				path = moviePosterDaoList.get(i).getMoviePosterPath();
 				
-				preparedStatement.setString(1,  moviePosterDaoList.get(i).getMovieTitle());
-				preparedStatement.setString(2,  moviePosterDaoList.get(i).getMoviePosterPath());
+				preparedStatement.setString(1, title);
+				preparedStatement.setString(2, path);
 				preparedStatement.addBatch();
-				preparedStatement.clearParameters();
 				 
 				if((i + 1) % BATCH_UNIT == 0) {
 					System.out.println("executeBatch()");
 					preparedStatement.executeBatch();
 					connection.commit();
 					preparedStatement.clearBatch();
+					preparedStatement.clearParameters();
 				}
 			}
 			
 			preparedStatement.executeBatch();
 			connection.commit();
 			preparedStatement.clearBatch();
+			preparedStatement.clearParameters();
 			
 		} 
 		catch (SQLException e) {
@@ -75,7 +77,7 @@ public class DatabaseProcessorOnMoviePosterTable {
 		}
 		finally {
 			try {
-				if(connection != null || !connection.isClosed()) {
+				if(connection != null && !connection.isClosed()) {
 					connection.close();
 				}
 				
