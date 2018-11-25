@@ -1,6 +1,5 @@
 package edu.doubler.toy.movie;
 
-import java.net.URL;
 import java.util.ArrayList;
 
 public interface MovieKeeper {
