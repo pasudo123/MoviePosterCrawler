@@ -6,6 +6,7 @@
 ### 개발환경
 - java 1.8.0_181
 - Eclipse Version 2018-09
+- [HeidiSQL 9.5](https://www.heidisql.com/download.php?download=installer)
 - [jsoup 1.11.3](https://jsoup.org/)
 - [mysql connector java 8.0](https://dev.mysql.com/downloads/connector/j/)
 
